@@ -1,0 +1,183 @@
+  <!DOCTYPE html>
+<html lang="es">
+<head>
+<title>UOC Notifier</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<!-- Bootstrap -->
+<link href="thirdparty/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="thirdparty/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet" media="screen">
+<script src="thirdparty/jquery.min.js"></script>
+<script src="thirdparty/bootstrap/js/bootstrap.min.js"></script>
+<script src="chrome.js"></script>
+<script src="storage.js"></script>
+<script src="utils.js"></script>
+<script src="uoc.js"></script>
+<script src="classroom.js"></script>
+<script src="options.js"></script>
+<style>
+#tclassrooms {
+  margin-bottom: 20px;
+}
+.not_classroom {
+  margin-bottom: 5px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2 class="form-signin-heading"><img src="img/logo128.png" width="30"> UOC Notifier</h2>
+    <p class="lead">by <a href="https://github.com/crazyserver/UOC-notifier/" target="_blank">crazyserver</a></p>
+
+    <form class="form-signin" role="form">
+      <h3 class="translate">__LOGIN__</h3>
+      <div class="row">
+        <div class="col-xs-5">
+          <div class="form-group login">
+            <label for="username" class="translate">__USER__</label>
+            <div class="input-group">
+              <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+              <input id="username" type="text" class="form-control translateph" placeholder="__USER__">
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-5">
+          <div class="form-group login">
+            <label for="pwd" class="translate">__PASSWORD__</label>
+            <div class="input-group">
+              <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+              <input id="pwd" type="password" class="form-control translateph" placeholder="__PASSWORD__">
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-2">
+          <label>&nbsp;</label>
+          <div class="input-group">
+            <button id="save_btn" class="btn btn-large btn-primary">
+              <span class="glyphicon glyphicon-save"></span> <span class="translate">__SAVE__</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div id="alertstatus" class="alert alert-success">
+        <span id="status"></span>
+      </div>
+    </form>
+
+    <h3 class="translate">__OPTIONS__</h3>
+    <div class="row">
+      <div class="col-xs-6">
+        <div class="form-group">
+          <label for="uni" class="translate">__UNI__</label>
+          <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-globe"></span></span>
+            <select id="uni" class="form-control">
+              <option value="UOCc">UOC catalana</option>
+              <option value="UOCi">UOC iberoamericana</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-6">
+        <div class="form-group">
+          <label for="check_interval" class="translate">__INTERVAL__</label>
+          <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+            <input id="check_interval" type="number" min="5" step="5" class="form-control translateph" placeholder="__INTERVAL__">
+            <span class="input-group-addon translate">__MINUTES__</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-6">
+        <div class="form-group">
+          <label for="critical" class="translate">__CRITICAL__</label>
+          <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-warning-sign"></span></span>
+            <input id="critical" type="number" min="0" class="form-control translateph" placeholder="__MESSAGES__">
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-6">
+        <div class="form-group">
+          <label>&nbsp;</label>
+          <div class="input-group">
+            <span class="input-group-addon">
+              <input id="check_mail" type="checkbox">
+            </span>
+            <label for="check_mail" class="form-control translate">__CHECK_MAIL__</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="translate">__SHOW__</h3>
+    <div class="row">
+      <div class="col-xs-6">
+        <div class="form-group">
+          <label>&nbsp;</label>
+          <div class="input-group">
+            <span class="input-group-addon">
+              <input id="show_agenda" type="checkbox">
+            </span>
+            <label for="show_agenda" class="form-control translate">__AGENDA__</label>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-6">
+        <div class="form-group">
+          <label>&nbsp;</label>
+          <div class="input-group">
+            <span class="input-group-addon">
+              <input id="show_module_dates" type="checkbox">
+            </span>
+            <label for="show_module_dates" class="form-control translate">__SHOW_MODULE_DATES__</label>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-6">
+        <div class="form-group">
+          <label for="today_tab" class="translate">__UPCOMMING_DAYS__</label>
+          <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-flag"></span></span>
+            <input id="today_tab" type="number" min="0" max="365" class="form-control translateph" placeholder="__UPCOMMING_DAYS__">
+            <span class="input-group-addon translate">__DAYS__</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-6">
+        <div class="form-group">
+          <label>&nbsp;</label>
+          <div class="input-group">
+            <span class="input-group-addon">
+              <input id="notification" type="checkbox">
+            </span>
+            <label for="notification" class="form-control translate">__NOTIFICATION__</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <h3 class="translate">__CLASS_NOTIFY__</h3>
+    <div class="alert alert-warning translate">__DISABLE_UNUSED_CLASSROOMS__</div>
+    <div id="tclassrooms"></div>
+
+    <footer>
+      <div class="well">
+        <span class="translate">__FAQ_LINK__</span>&nbsp;<a target="_blank" href="https://github.com/crazyserver/UOC-notifier/wiki/FAQ---Frequently-Asked-Questions">FAQ</a>
+      </div>
+      <button id="reset_btn" class="btn btn-large btn-danger">
+          <span class="glyphicon glyphicon-exclamation-sign"></span> <span class="translate">__RESET_CLASSROOMS__</span>
+      </button>
+      <button id="reset_session_btn" class="btn btn-large btn-danger">
+          <span class="glyphicon glyphicon-exclamation-sign"></span> <span class="translate">__RESET_SESSION__</span>
+      </button>
+      <div class="pull-right"><span class="translate">__VERSION__</span> <span id="version"></span></div>
+    </footer>
+</div>
+</body>
+</html>
